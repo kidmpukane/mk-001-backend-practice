@@ -1,3 +1,5 @@
+[x]: Fix the Merchant and Store data bases
 []: Fix unique IDs
-[]: Fix date created & updated
-[]: Create store functionality
+[x]: Fix date created & updated
+[x]: Create store functionality
+[]: Create image upload functionality
