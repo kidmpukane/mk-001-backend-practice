@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Store
 from .serializers import StoreSerializer
-from user_profiles.models import Merchant
 
 
 @api_view(['GET'])
