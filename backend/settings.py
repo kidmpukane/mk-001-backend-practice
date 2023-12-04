@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'user_profiles',
-    # 'store',
+    'store',
     # 'store_collections',
     # 'store_galleries',
     # 'store_products',
