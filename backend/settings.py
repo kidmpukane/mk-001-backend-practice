@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_profiles',
     'store',
-    # 'store_collections',
+    'store_collections',
     # 'store_galleries',
     # 'store_products',
     'rest_framework',
