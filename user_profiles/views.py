@@ -27,21 +27,20 @@ def get_all_customer_data(request):
 
 #.......................................REGISTER USERS.......................................
 
-def register_user(serializer_class):
+def register_user(serializer_class, request):
     serializer = serializer_class(data=request.data)
     if serializer.is_valid():
         serializer.save()
-
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def register_merchant(request):
-    return register_user(MerchantSerializer)
-
+    return register_user(MerchantSerializer, request)
 
 @api_view(['POST'])
 def register_customer(request):
-    return register_user(CustomerSerializer)
-
+    return register_user(CustomerSerializer, request)
 
 
 
@@ -70,9 +69,9 @@ def get_merchant_profile(request, id):
 #.......................................EDIT USER DATA.......................................
 
 # @api_view(['PUT'])
-# def update_user_data(request, id):
-#     user_profiles_info_update = Merchant.objects.get(pk=id)
-#     serializer = MerchantSerializer(
+# def update_user_data(request, id, queryset, serializer_class):
+#     user_profiles_info_update = queryset.objects.get(pk=id)
+#     serializer = serializer_class(
 #         instance=user_profiles_info_update, data=request.data)
 
 #     if serializer.is_valid():
@@ -80,9 +79,16 @@ def get_merchant_profile(request, id):
 
 #     return Response(serializer.data)
 
+# @api_view(['PUT'])
+# def update_merchant_data(request, id):
+#     return update_user_data(request, id, Merchant, MerchantSerializer)
 
-# @api_view(['DELETE'])
-# def delete_user_data(request, id):
-#     user_profile_delete_info = Merchant.objects.get(pk=id)
-#     user_profile_delete_info.delete()
-#     return Response("User successfully deleted")
+# @api_view(['PUT'])
+# def update_customer_data(request, id):
+#     return update_user_data(request, id, Customer, CustomerSerializer)
+
+@api_view(['DELETE'])
+def delete_user_data(request, id):
+    user_profile_delete_info = Customer.objects.get(pk=id)
+    user_profile_delete_info.delete()
+    return Response("User successfully deleted")

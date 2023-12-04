@@ -8,6 +8,7 @@ urlpatterns = [
     path('register-new-customer/', views.register_customer),
     path('customer-profile/<int:id>/', views.get_customer_profile),
     path('merchant-profile/<int:id>/', views.get_merchant_profile),
-    # path('update/<int:id>/', views.update_user_data),
-    # path('delete/<int:id>/', views.delete_user_data),
+    # path('update-merchant-profile/<int:id>/', views.update_merchant_data),
+    # path('update-customer-profile/<int:id>/', views.update_customer_data),
+    path('delete/<int:id>/', views.delete_user_data),
 ]
