@@ -4,7 +4,8 @@ from store.models import Store
 from user_profiles.models import Customer
 
 class BaseCollection(RandomIDModel):
-    collection_title = models.CharField(max_length=25)
+    collection_title = models.CharField(max_length=150)
+    collection_subtitle = models.CharField(max_length=100, null=True, blank=True)
     collection_image = models.CharField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
