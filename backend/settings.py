@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'store',
     'store_collections',
     # 'store_galleries',
-    # 'store_products',
+    'products',
     'rest_framework',
     "corsheaders",
 ]

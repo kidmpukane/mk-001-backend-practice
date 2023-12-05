@@ -7,6 +7,6 @@ urlpatterns = [
     path('api/', include('store.urls')),
     path('api/store/', include('store_collections.urls')),
     # path('api/store/gallery/', include('store_galleries.urls')),
-    # path('api/products/', include('store_products.urls')),
+    path('api/products/', include('products.urls')),
 
 ]
