@@ -14,6 +14,21 @@ from .serializers import (
 
 #.......................................GET ALL USER DATA.......................................
 
+@api_view(['GET'])
+def get_all_products(request):
+    primary_products = PrimaryProduct.objects.all()
+    secondary_products = SecondaryProduct.objects.all()
+    
+    primary_serializer = PrimaryProductSerializer(primary_products, many=True)
+    secondary_serializer = SecondaryProductSerializer(secondary_products, many=True)
+    
+    all_products = {
+        "all_products": primary_serializer.data + secondary_serializer.data
+    }
+    
+    return Response(all_products)
+
+
 def get_data(queryset, serializer_class):
     data = queryset.objects.all()
     serializer = serializer_class(data, many=True)

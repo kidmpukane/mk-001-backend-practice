@@ -5,6 +5,7 @@ urlpatterns = [
     path('all-primary-products', views.get_all_primary_products),
     path('all-secondary-products', views.get_all_secondary_products),
     path('all-tertiary-products', views.get_all_tertiary_products),
+    path('all-products', views.get_all_products),
 
 
     path('create-primary-product', views.create_primary_product),
