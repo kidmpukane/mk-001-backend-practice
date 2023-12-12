@@ -53,7 +53,7 @@ def get_all_tertiary_products(request):
 
 #.......................................REGISTER STORE.......................................
 
-def store_registration(serializer_class, request):
+def product_registration(serializer_class, request):
     serializer = serializer_class(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -62,15 +62,15 @@ def store_registration(serializer_class, request):
 
 @api_view(['POST'])
 def create_primary_product(request):
-    return store_registration(PrimaryProductSerializer, request)
+    return product_registration(PrimaryProductSerializer, request)
 
 @api_view(['POST'])
 def create_secondary_product(request):
-    return store_registration(SecondaryProductSerializer, request)
+    return product_registration(SecondaryProductSerializer, request)
 
 @api_view(['POST'])
 def create_tertiary_product(request):
-    return store_registration(TertiaryProductSerializer, request)
+    return product_registration(TertiaryProductSerializer, request)
 
 #.......................................GET USER BY ID.......................................
 

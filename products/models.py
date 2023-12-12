@@ -13,6 +13,7 @@ class BaseProduct(models.Model):
     product_image = models.CharField(max_length=250)
     product_sizes = models.CharField(max_length=250)
     product_colours = models.CharField(max_length=250)
+    feature_list = models.BigIntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
