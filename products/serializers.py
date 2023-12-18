@@ -19,13 +19,29 @@ from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 from background_task import background
 import logging
 from .models import (
+    BaseProduct,
     PrimaryProduct, 
     SecondaryProduct, 
     TertiaryProduct
 )
 
 cnn_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+class AllProductsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BaseProduct  # Use the appropriate base model
+        fields = '__all__'  # Serialize all fields; adjust as needed
 
+class ProductInputSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    product_name = serializers.CharField(max_length=100)
+    product_image = serializers.URLField()
+    product_sizes = serializers.CharField()
+    product_colours = serializers.CharField()
+    feature_list = serializers.ListField(allow_null=True)
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()
+    merchant_id = serializers.IntegerField()
+    collection_id = serializers.IntegerField()
 class PrimaryProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = PrimaryProduct

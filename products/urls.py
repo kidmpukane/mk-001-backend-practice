@@ -7,6 +7,11 @@ urlpatterns = [
     path('all-tertiary-products', views.get_all_tertiary_products),
     path('all-products', views.get_all_products),
 
+    path('find-nearest-neighbors', views.find_the_nearest_neighbor),
+
+    path('primary_product/<int:primary_id>/', views.get_primary_product),
+    path('secondary_product/<int:secondary_id>/', views.get_secondary_product),
+
 
     path('create-primary-product', views.create_primary_product),
     path('create-secondary-product', views.create_secondary_product),
