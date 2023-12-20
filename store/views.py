@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 from .models import Store
+from user_profiles.models import Merchant
 from .serializers import StoreSerializer
 
 #.......................................GET ALL USER DATA.......................................
@@ -33,19 +34,16 @@ def register_store(request):
 
 #.......................................GET USER BY ID.......................................
 
-def get_store(request, id, profile_model, serializer_class):
-    try:
-        user_profile_data = profile_model.objects.get(pk=id)
-    except profile_model.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    if request.method == 'GET':
-        serializer = serializer_class(user_profile_data)
-        return Response(serializer.data)
-
 @api_view(['GET'])
-def get_store_by_id(request, id):
-    return get_store(request, id, Store, StoreSerializer)
+def get_store_by_id(request, merchant_id):
+    try:
+
+        store_query = Store.objects.filter(merchant_id=merchant_id)
+    except Store.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = StoreSerializer(store_query, many=True)
+        return Response(serializer.data)
 
 
 
