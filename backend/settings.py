@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'product_feed',
     'rest_framework',
     "corsheaders",
+    "accounts"
 ]
 
 MIDDLEWARE = [
@@ -147,7 +148,10 @@ CORS_ALLOW_HEADERS = (
     "x-requested-with",
 )
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
-    ],
+    ]
 }
