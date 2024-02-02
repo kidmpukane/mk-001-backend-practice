@@ -1,9 +1,10 @@
 from django.db import models
 from django_random_id_model import RandomIDModel
+from django.contrib.auth.models import User
 
 
 class BaseUser(RandomIDModel):
-
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
     profile_picture = models.CharField(max_length=500)
     background_picture = models.CharField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -14,18 +15,16 @@ class BaseUser(RandomIDModel):
 
 
 class Customer(BaseUser):
-    user_name = models.CharField(max_length=225)
     at_user = models.CharField(max_length=100)
     user_bio = models.CharField(max_length=500)
     is_merchant = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user_name}"
+        return f"{self.at_user}"
 
 
 class Merchant(BaseUser):
-    store_name = models.CharField(max_length=225)
-    at_store = models.CharField(max_length=100)
+    at_merchant = models.CharField(max_length=100)
     store_description = models.CharField(max_length=500)
     is_merchant = models.BooleanField(default=True)
 
