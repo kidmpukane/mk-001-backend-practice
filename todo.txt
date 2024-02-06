@@ -1,5 +1,5 @@
 []: Fix the Merchant and Store create through Json
-[]: Create Collection, Gallery, as well as the Gallery view
+[x]: Create Collection, Gallery, as well as the Gallery view
 []: Fix unique IDs
 [x]: Fix date created & updated
 [x]: Create store functionality

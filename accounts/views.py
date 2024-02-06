@@ -1,3 +1,5 @@
+from django.middleware.csrf import get_token
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework import permissions
@@ -59,3 +61,39 @@ class GetCSRFToken(APIView):
 
     def get(self, request, format=None):
         return Response({'success': 'CSRF cookie set'})
+
+
+class LoginView(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def post(self, request, format=None):
+        data = self.request.data
+
+        username = data['username']
+        password = data['password']
+
+        try:
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+
+                # Generate CSRF token and add it to the session
+                csrf_token = get_token(request)
+                request.session['csrf_token'] = csrf_token
+
+                # Store user information in the session
+                request.session['user_id'] = user.id
+                request.session['username'] = user.username
+
+                # Return the CSRF token and session ID in the response
+                return Response({
+                    'success': 'User has been authenticated',
+                    'user_id': user.id,
+                    'csrf_token': csrf_token,
+                    'sessionid': request.session.session_key
+                })
+            else:
+                return Response({'error': 'Error authenticating user'})
+        except:
+            return Response({'error': 'Something went wrong when logging in'})
