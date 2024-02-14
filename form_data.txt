@@ -1,5 +1,20 @@
 {
     "username" : "danhooker",
     "password": "qwerty123456"
+}
 
+    {
+        "id": 537697393128,
+        "profile_picture": "https://i.guim.co.uk/img/media/0872865e46b5460e5b80e992c76c2f2129d89210/330_99_2593_1556/master/2593.jpg?width=620&dpr=2&s=none",
+        "background_picture": "https://dynamicstriking.com/cdn/shop/articles/unnamed_48_1024x1024.png?v=1670493488",
+        "at_user": "@thehangman",
+        "user_bio": "When I fight someone, I want to break his will. I want to take his manhood. I want to rip out his heart and show it to him.",
+        "is_merchant": false,
+        "user": 3
+    }
+
+{
+    "username" : "mike_tyson",
+    "password": "qwerty123456",
+    "re_password": "qwerty123456"
 }

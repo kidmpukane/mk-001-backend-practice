@@ -1,12 +1,14 @@
 from django.middleware.csrf import get_token
+from rest_framework.decorators import api_view
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
-from rest_framework import permissions
+from rest_framework import permissions, status
 from django.contrib import auth
 from django.contrib.auth import authenticate, login
 from rest_framework.response import Response
 from user_profiles.models import Merchant, Customer
+from user_profiles.serializers import MerchantSerializer, CustomerSerializer
 from .serializers import UserSerializer
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.utils.decorators import method_decorator
@@ -42,7 +44,27 @@ class SignupView(APIView):
                         if auth_user is not None:
                             login(request, auth_user)
 
-                            # Store additional information in the session, if needed
+                            # Check if the user is a merchant or a customer
+                            is_merchant = data.get('is_merchant', False)
+
+                            if is_merchant:
+                                user_profile = Merchant.objects.create(
+                                    user=user,
+                                    profile_picture="",
+                                    background_picture="",
+                                    at_user="",
+                                    user_bio=""
+                                )
+                            else:
+                                user_profile = Customer.objects.create(
+                                    user=user,
+                                    profile_picture="",
+                                    background_picture="",
+                                    at_user="",
+                                    user_bio=""
+                                )
+
+                            # Store additional information in the session if needed
                             request.session['user_id'] = user.id
                             request.session['username'] = user.username
 
@@ -51,8 +73,8 @@ class SignupView(APIView):
                             return Response({'error': 'Error authenticating user'})
             else:
                 return Response({'error': 'Passwords do not match'})
-        except:
-            return Response({'error': 'Something went wrong when registering account'})
+        except Exception as e:
+            return Response({'error': f'Something went wrong when registering account: {str(e)}'})
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
@@ -97,3 +119,28 @@ class LoginView(APIView):
                 return Response({'error': 'Error authenticating user'})
         except:
             return Response({'error': 'Something went wrong when logging in'})
+
+
+# --------------------------------------------GET USER----------------------------------------------
+@api_view(['GET'])
+def get_customer_by_id(request, user):
+    try:
+        store_query = Customer.objects.get(user=user)
+    except Customer.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = CustomerSerializer(store_query)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_merchant_by_id(request, user):
+    try:
+
+        store_query = Merchant.objects.filter(user=user)
+    except Merchant.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = MerchantSerializer(store_query, many=True)
+        return Response(serializer.data)
