@@ -18,3 +18,15 @@
     "password": "qwerty123456",
     "re_password": "qwerty123456"
 }
+
+{
+    "id": 657787307673,
+    "profile_picture": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.quora.com%2FHow-can-a-Mike-Tyson-at-his-prime-like-boxer-fight-a-brown-bear-and-get-the-final-win&psig=AOvVaw1-Z_NtWt7A8F8ZGjqbx7v5&ust=1708091020212000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCOiV0IW9rYQDFQAAAAAdAAAAABAF",
+    "background_picture": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.scmp.com%2Fsport%2Fboxing%2Farticle%2F3033911%2Fmike-tyson-was-knocking-out-grown-men-just-12-years-old-says-former&psig=AOvVaw0sJPGSE0e3oM0DlJe2taX3&ust=1708090993836000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCJCjtpS9rYQDFQAAAAAdAAAAABAJ",
+    "created_at": "2024-02-13T14:30:07.891829Z",
+    "updated_at": "2024-02-13T14:30:07.891829Z",
+    "at_user": "@ironmike",
+    "user_bio": "I have to dream and reach for the stars, and if I miss a star then I grab a handful of clouds. God lets everything happen for a reason. It's all a learning process, and you have to go from one level to another. As long as we persevere and endure, we can get anything we want",
+    "is_merchant": false,
+    "user": 10
+}

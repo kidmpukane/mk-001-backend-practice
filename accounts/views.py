@@ -1,3 +1,6 @@
+from django.views.decorators.csrf import ensure_csrf_cookie
+from rest_framework import permissions
+from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from rest_framework.decorators import api_view
 from django.contrib.auth import authenticate, login, logout
@@ -15,7 +18,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.sessions.models import Session
 
 
-# @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class SignupView(APIView):
     permission_classes = (permissions.AllowAny, )
 
@@ -82,7 +85,10 @@ class GetCSRFToken(APIView):
     permission_classes = (permissions.AllowAny, )
 
     def get(self, request, format=None):
-        return Response({'success': 'CSRF cookie set'})
+        csrf_token = get_token(request)
+        response_data = {'success': 'CSRF cookie set',
+                         'csrf_token': csrf_token}
+        return JsonResponse(response_data)
 
 
 class LoginView(APIView):
