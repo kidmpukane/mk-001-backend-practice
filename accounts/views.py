@@ -15,7 +15,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.sessions.models import Session
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class SignupView(APIView):
     permission_classes = (permissions.AllowAny, )
 
