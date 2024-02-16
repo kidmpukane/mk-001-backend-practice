@@ -112,11 +112,11 @@ class UpdateUserData(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UpdateMerchantData(UpdateUserData):
-    def put(self, request, id):
-        return super().put(request, id, Merchant, MerchantSerializer)
-
-
 class UpdateCustomerData(UpdateUserData):
     def put(self, request, id):
         return super().put(request, id, Customer, CustomerSerializer)
+
+
+class UpdateMerchantData(UpdateUserData):
+    def put(self, request, id):
+        return super().put(request, id, Merchant, MerchantSerializer)
