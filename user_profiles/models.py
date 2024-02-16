@@ -16,6 +16,7 @@ class BaseUser(RandomIDModel):
 
 class Customer(BaseUser):
     at_user = models.CharField(max_length=100)
+    user_name = models.CharField(max_length=100, default="no-username")
     user_bio = models.CharField(max_length=500)
     is_merchant = models.BooleanField(default=False)
 
@@ -25,8 +26,9 @@ class Customer(BaseUser):
 
 class Merchant(BaseUser):
     at_merchant = models.CharField(max_length=100)
+    user_name = models.CharField(max_length=100, default="no-username")
     store_description = models.CharField(max_length=500)
     is_merchant = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.store_name}"
+        return f"{self.at_merchant}"
