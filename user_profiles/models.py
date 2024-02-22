@@ -5,8 +5,10 @@ from django.contrib.auth.models import User
 
 class BaseUser(RandomIDModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
-    profile_picture = models.CharField(max_length=500)
-    background_picture = models.CharField(max_length=500)
+    profile_picture = models.ImageField(
+        upload_to='images/', null=True, blank=True)
+    background_picture = models.ImageField(
+        upload_to='images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
