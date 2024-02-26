@@ -1,10 +1,11 @@
 from django.db import models
 from django_random_id_model import RandomIDModel
-from django.contrib.auth.models import User
+from accounts.models import CustomUser
 
 
 class BaseUser(RandomIDModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
+    user = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, default=1)
     profile_picture = models.ImageField(
         upload_to='images/', null=True, blank=True)
     background_picture = models.ImageField(

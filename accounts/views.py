@@ -1,83 +1,18 @@
-from django.views.decorators.csrf import ensure_csrf_cookie
-from rest_framework import permissions
+from .models import CustomUser
 from django.http import JsonResponse
-from django.middleware.csrf import get_token
-from rest_framework.decorators import api_view
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
 from rest_framework.views import APIView
-from rest_framework import permissions, status
-from django.contrib import auth
-from django.contrib.auth import authenticate, login
+from django.middleware.csrf import get_token
 from rest_framework.response import Response
+from rest_framework.response import Response
+from .serializers import CustomUserSerializer
+from rest_framework.decorators import api_view
+from rest_framework import permissions, status
+from rest_framework.generics import CreateAPIView
 from user_profiles.models import Merchant, Customer
-from user_profiles.serializers import MerchantSerializer, CustomerSerializer
-from .serializers import UserSerializer
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from django.contrib.auth import authenticate, login
 from django.utils.decorators import method_decorator
-from django.contrib.sessions.models import Session
-
-
-@method_decorator(csrf_protect, name='dispatch')
-class SignupView(APIView):
-    permission_classes = (permissions.AllowAny, )
-
-    def post(self, request, format=None):
-        data = self.request.data
-
-        username = data['username']
-        password = data['password']
-        re_password = data['re_password']
-
-        try:
-            if password == re_password:
-                if User.objects.filter(username=username).exists():
-                    return Response({'error': 'Username already exists'})
-                else:
-                    if len(password) < 6:
-                        return Response({'error': 'Password must be at least 6 characters'})
-                    else:
-                        # Create a new user
-                        user = User.objects.create_user(
-                            username=username, password=password)
-
-                        # Log in the user
-                        auth_user = authenticate(
-                            request, username=username, password=password)
-                        if auth_user is not None:
-                            login(request, auth_user)
-
-                            # Check if the user is a merchant or a customer
-                            is_merchant = data.get('is_merchant', False)
-
-                            if is_merchant:
-                                user_profile = Merchant.objects.create(
-                                    user=user,
-                                    profile_picture="",
-                                    background_picture="",
-                                    at_user="",
-                                    user_bio=""
-                                )
-                            else:
-                                user_profile = Customer.objects.create(
-                                    user=user,
-                                    profile_picture="",
-                                    background_picture="",
-                                    at_user="",
-                                    user_bio=""
-                                )
-
-                            # Store additional information in the session if needed
-                            request.session['user_id'] = user.id
-                            request.session['username'] = user.username
-
-                            return Response({'success': 'User created and logged in successfully'})
-                        else:
-                            return Response({'error': 'Error authenticating user'})
-            else:
-                return Response({'error': 'Passwords do not match'})
-        except Exception as e:
-            return Response({'error': f'Something went wrong when registering account: {str(e)}'})
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from user_profiles.serializers import MerchantSerializer, CustomerSerializer
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
@@ -91,17 +26,43 @@ class GetCSRFToken(APIView):
         return JsonResponse(response_data)
 
 
+@method_decorator(csrf_protect, name='dispatch')
+class SignupView(CreateAPIView):
+    queryset = CustomUser.objects.all()
+    permission_classes = (permissions.AllowAny, )
+    serializer_class = CustomUserSerializer
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+
+        # Log in the user after successfully creating an account
+        if response.status_code == status.HTTP_201_CREATED:
+            email = request.data.get('email')
+            password = request.data.get('password')
+
+            auth_user = authenticate(request, email=email, password=password)
+
+            if auth_user is not None:
+                login(request, auth_user)
+
+                # You can store additional information in the session if needed
+                request.session['user_id'] = auth_user.id
+                request.session['email'] = auth_user.email
+
+        return response
+
+
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny, )
 
     def post(self, request, format=None):
         data = self.request.data
 
-        username = data['username']
-        password = data['password']
+        email = data.get('email')
+        password = data.get('password')
 
         try:
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, email=email, password=password)
 
             if user is not None:
                 login(request, user)
@@ -112,7 +73,8 @@ class LoginView(APIView):
 
                 # Store user information in the session
                 request.session['user_id'] = user.id
-                request.session['username'] = user.username
+                # Replace with the correct field if needed
+                request.session['email'] = user.email
 
                 # Return the CSRF token and session ID in the response
                 return Response({
@@ -122,9 +84,9 @@ class LoginView(APIView):
                     'sessionid': request.session.session_key
                 })
             else:
-                return Response({'error': 'Error authenticating user'})
-        except:
-            return Response({'error': 'Something went wrong when logging in'})
+                return Response({'error': 'Invalid email or password'})
+        except Exception as e:
+            return Response({'error': f'Something went wrong when logging in: {str(e)}'})
 
 
 # --------------------------------------------GET USER----------------------------------------------
