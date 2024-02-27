@@ -6,6 +6,7 @@ from accounts.models import CustomUser
 class BaseUser(RandomIDModel):
     user = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, default=1)
+    email = models.EmailField(null=True, blank=True)
     profile_picture = models.ImageField(
         upload_to='images/', null=True, blank=True)
     background_picture = models.ImageField(

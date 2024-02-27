@@ -27,7 +27,7 @@ class GetCSRFToken(APIView):
         return JsonResponse(response_data)
 
 
-@method_decorator(csrf_protect, name='dispatch')
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class SignupView(APIView):
     permission_classes = (permissions.AllowAny, )
 
@@ -41,10 +41,10 @@ class SignupView(APIView):
         try:
             if password == re_password:
                 if CustomUser.objects.filter(email=email).exists():
-                    return Response({'error': 'Email already exists'})
+                    return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     if len(password) < 6:
-                        return Response({'error': 'Password must be at least 6 characters'})
+                        return Response({'error': 'Password must be at least 6 characters'}, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         user = CustomUser.objects.create_user(
                             email=email, password=password)
@@ -55,13 +55,49 @@ class SignupView(APIView):
                         if auth_user is not None:
                             login(request, auth_user)
 
-                        # Add any additional profile creation logic here if needed
+                            # Check if the user is a merchant or a customer
+                            is_merchant = data.get('is_merchant', False)
 
-                        return Response({'success': 'User created and logged in successfully'})
+                            if is_merchant:
+                                Merchant.objects.create(
+                                    user=auth_user,
+                                    email=auth_user.email,
+                                    profile_picture="",
+                                    background_picture="",
+                                    at_merchant="",
+                                    store_description="",
+                                    is_merchant=True
+                                )
+                            else:
+                                Customer.objects.create(
+                                    user=auth_user,
+                                    email=auth_user.email,
+                                    profile_picture="",
+                                    background_picture="",
+                                    at_user="",
+                                    user_bio="",
+                                    is_merchant=False
+                                )
+
+                            # Add any additional profile creation logic here if needed
+
+                            # Generate CSRF token and add it to the session
+                            csrf_token = get_token(request)
+                            request.session['csrf_token'] = csrf_token
+
+                            # Return the CSRF token, session ID, email, and user ID in the response
+                            return Response({
+                                'success': 'User created and logged in successfully',
+                                'csrf_token': csrf_token,
+                                'sessionid': request.session.session_key,
+                                'email': auth_user.email,
+                                'user_id': auth_user.id
+                            })
+
             else:
-                return Response({'error': 'Passwords do not match'})
+                return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response({'error': f'Something went wrong when registering account: {str(e)}'})
+            return Response({'error': f'Something went wrong when registering account: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class LoginView(APIView):

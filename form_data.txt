@@ -30,3 +30,10 @@
     "is_merchant": false,
     "user": 10
 }
+
+{
+  "email": "merchant@example.com",
+  "password": "securepassword",
+  "re_password": "securepassword",
+  "is_merchant": true
+}
