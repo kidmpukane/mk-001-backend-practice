@@ -114,11 +114,23 @@ class LoginView(APIView):
 
             if user is not None:
                 auth.login(request, user)
-                return Response({'success': 'User authenticated'})
+
+                # Generate CSRF token and add it to the session
+                csrf_token = get_token(request)
+                request.session['csrf_token'] = csrf_token
+
+                # Return the CSRF token, session ID, email, and user ID in the response
+                return Response({
+                    'success': 'User authenticated',
+                    'csrf_token': csrf_token,
+                    'sessionid': request.session.session_key,
+                    'email': user.email,
+                    'user_id': user.id
+                })
             else:
-                return Response({'error': 'Error Authenticating'})
-        except:
-            return Response({'error': 'Something went wrong when logging in'})
+                return Response({'error': 'Invalid email or password'}, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            return Response({'error': f'Something went wrong when logging in: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # --------------------------------------------GET USER----------------------------------------------
 
