@@ -37,3 +37,8 @@
   "re_password": "securepassword",
   "is_merchant": true
 }
+
+{
+  "email": "merchant@example.com",
+  "password": "securepassword"
+}

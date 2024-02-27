@@ -91,7 +91,8 @@ class SignupView(APIView):
                                 'csrf_token': csrf_token,
                                 'sessionid': request.session.session_key,
                                 'email': auth_user.email,
-                                'user_id': auth_user.id
+                                'user_id': auth_user.id,
+                                'is_merchant': auth_user.is_merchant
                             })
 
             else:
@@ -115,22 +116,27 @@ class LoginView(APIView):
             if user is not None:
                 auth.login(request, user)
 
+                # Check if the user is a merchant or a customer
+                is_merchant = getattr(user, 'merchant', None) is not None
+
                 # Generate CSRF token and add it to the session
                 csrf_token = get_token(request)
                 request.session['csrf_token'] = csrf_token
 
-                # Return the CSRF token, session ID, email, and user ID in the response
+                # Return the CSRF token, session ID, email, user ID, and is_merchant in the response
                 return Response({
                     'success': 'User authenticated',
                     'csrf_token': csrf_token,
                     'sessionid': request.session.session_key,
                     'email': user.email,
-                    'user_id': user.id
+                    'user_id': user.id,
+                    'is_merchant': is_merchant
                 })
             else:
                 return Response({'error': 'Invalid email or password'}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({'error': f'Something went wrong when logging in: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 # --------------------------------------------GET USER----------------------------------------------
 
