@@ -1,4 +1,5 @@
 from .models import CustomUser
+from django.contrib import auth
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from django.middleware.csrf import get_token
@@ -27,29 +28,40 @@ class GetCSRFToken(APIView):
 
 
 @method_decorator(csrf_protect, name='dispatch')
-class SignupView(CreateAPIView):
-    queryset = CustomUser.objects.all()
+class SignupView(APIView):
     permission_classes = (permissions.AllowAny, )
-    serializer_class = CustomUserSerializer
 
-    def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
+    def post(self, request, format=None):
+        data = self.request.data
 
-        # Log in the user after successfully creating an account
-        if response.status_code == status.HTTP_201_CREATED:
-            email = request.data.get('email')
-            password = request.data.get('password')
+        email = data['email']
+        password = data['password']
+        re_password = data['re_password']
 
-            auth_user = authenticate(request, email=email, password=password)
+        try:
+            if password == re_password:
+                if CustomUser.objects.filter(email=email).exists():
+                    return Response({'error': 'Email already exists'})
+                else:
+                    if len(password) < 6:
+                        return Response({'error': 'Password must be at least 6 characters'})
+                    else:
+                        user = CustomUser.objects.create_user(
+                            email=email, password=password)
 
-            if auth_user is not None:
-                login(request, auth_user)
+                        # Authenticate and login the user
+                        auth_user = authenticate(
+                            request, email=email, password=password)
+                        if auth_user is not None:
+                            login(request, auth_user)
 
-                # You can store additional information in the session if needed
-                request.session['user_id'] = auth_user.id
-                request.session['email'] = auth_user.email
+                        # Add any additional profile creation logic here if needed
 
-        return response
+                        return Response({'success': 'User created and logged in successfully'})
+            else:
+                return Response({'error': 'Passwords do not match'})
+        except Exception as e:
+            return Response({'error': f'Something went wrong when registering account: {str(e)}'})
 
 
 class LoginView(APIView):
@@ -58,38 +70,23 @@ class LoginView(APIView):
     def post(self, request, format=None):
         data = self.request.data
 
-        email = data.get('email')
-        password = data.get('password')
+        email = data['email']
+        password = data['password']
 
         try:
-            user = authenticate(request, email=email, password=password)
+            user = auth.authenticate(email=email, password=password)
 
             if user is not None:
-                login(request, user)
-
-                # Generate CSRF token and add it to the session
-                csrf_token = get_token(request)
-                request.session['csrf_token'] = csrf_token
-
-                # Store user information in the session
-                request.session['user_id'] = user.id
-                # Replace with the correct field if needed
-                request.session['email'] = user.email
-
-                # Return the CSRF token and session ID in the response
-                return Response({
-                    'success': 'User has been authenticated',
-                    'user_id': user.id,
-                    'csrf_token': csrf_token,
-                    'sessionid': request.session.session_key
-                })
+                auth.login(request, user)
+                return Response({'success': 'User authenticated'})
             else:
-                return Response({'error': 'Invalid email or password'})
-        except Exception as e:
-            return Response({'error': f'Something went wrong when logging in: {str(e)}'})
-
+                return Response({'error': 'Error Authenticating'})
+        except:
+            return Response({'error': 'Something went wrong when logging in'})
 
 # --------------------------------------------GET USER----------------------------------------------
+
+
 @api_view(['GET'])
 def get_customer_by_id(request, user):
     try:
