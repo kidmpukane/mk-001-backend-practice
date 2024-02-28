@@ -5,14 +5,12 @@ from rest_framework.views import APIView
 from django.middleware.csrf import get_token
 from rest_framework.response import Response
 from rest_framework.response import Response
-from .serializers import CustomUserSerializer
 from rest_framework.decorators import api_view
 from rest_framework import permissions, status
-from rest_framework.generics import CreateAPIView
 from user_profiles.models import Merchant, Customer
 from django.contrib.auth import authenticate, login
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from django.views.decorators.csrf import ensure_csrf_cookie
 from user_profiles.serializers import MerchantSerializer, CustomerSerializer
 
 
@@ -57,9 +55,11 @@ class SignupView(APIView):
 
                             # Check if the user is a merchant or a customer
                             is_merchant = data.get('is_merchant', False)
+                            print(f'is_merchant from data: {is_merchant}')
+                            print(f'Request data: {request.data}')
 
                             if is_merchant:
-                                Merchant.objects.create(
+                                merchant_profile = Merchant.objects.create(
                                     user=auth_user,
                                     email=auth_user.email,
                                     profile_picture="",
@@ -68,8 +68,10 @@ class SignupView(APIView):
                                     store_description="",
                                     is_merchant=True
                                 )
+                                auth_user.is_merchant = True
+                                auth_user.save()
                             else:
-                                Customer.objects.create(
+                                customer_profile = Customer.objects.create(
                                     user=auth_user,
                                     email=auth_user.email,
                                     profile_picture="",
@@ -78,8 +80,8 @@ class SignupView(APIView):
                                     user_bio="",
                                     is_merchant=False
                                 )
-
-                            # Add any additional profile creation logic here if needed
+                                auth_user.is_merchant = False
+                                auth_user.save()
 
                             # Generate CSRF token and add it to the session
                             csrf_token = get_token(request)

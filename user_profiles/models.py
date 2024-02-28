@@ -11,6 +11,8 @@ class BaseUser(RandomIDModel):
         upload_to='images/', null=True, blank=True)
     background_picture = models.ImageField(
         upload_to='images/', null=True, blank=True)
+    user_name = models.CharField(max_length=100, default="no-username")
+    user_bio = models.CharField(max_length=500, default="no-bio")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -19,20 +21,16 @@ class BaseUser(RandomIDModel):
 
 
 class Customer(BaseUser):
-    at_user = models.CharField(max_length=100)
-    user_name = models.CharField(max_length=100, default="no-username")
-    user_bio = models.CharField(max_length=500)
-    is_merchant = models.BooleanField(default=False)
+    user_description = models.CharField(
+        max_length=500, default="no-description")
 
     def __str__(self):
-        return f"{self.at_user}"
+        return f"{self.email}"
 
 
 class Merchant(BaseUser):
-    at_merchant = models.CharField(max_length=100)
-    user_name = models.CharField(max_length=100, default="no-username")
-    store_description = models.CharField(max_length=500)
-    is_merchant = models.BooleanField(default=True)
+    store_description = models.CharField(
+        max_length=500, default="no-description")
 
     def __str__(self):
-        return f"{self.at_merchant}"
+        return f"{self.email}"

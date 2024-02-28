@@ -32,13 +32,26 @@
 }
 
 {
-  "email": "merchant@example.com",
-  "password": "securepassword",
-  "re_password": "securepassword",
+  "email": "customer@example.com",
+  "password": "qwerty123456",
+  "re_password": "qwerty123456",
+  "is_merchant": false
+}
+
+{
+  "email": "customer@example.com",
+  "password": "qwerty123456"
+}
+
+{
+  "email": "testclothing@ttcc.com",
+  "password": "qwerty123456",
+  "re_password": "qwerty123456",
   "is_merchant": true
 }
 
 {
-  "email": "merchant@example.com",
-  "password": "securepassword"
+  "email": "testclothing@ttcc.com",
+  "password": "qwerty123456"
 }
+
