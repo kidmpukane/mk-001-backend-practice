@@ -62,11 +62,12 @@ class SignupView(APIView):
                                 merchant_profile = Merchant.objects.create(
                                     user=auth_user,
                                     email=auth_user.email,
+                                    user_name="",
+                                    user_bio="",
                                     profile_picture="",
                                     background_picture="",
-                                    at_merchant="",
                                     store_description="",
-                                    is_merchant=True
+
                                 )
                                 auth_user.is_merchant = True
                                 auth_user.save()
@@ -76,9 +77,9 @@ class SignupView(APIView):
                                     email=auth_user.email,
                                     profile_picture="",
                                     background_picture="",
-                                    at_user="",
+                                    user_name="",
                                     user_bio="",
-                                    is_merchant=False
+                                    user_description="",
                                 )
                                 auth_user.is_merchant = False
                                 auth_user.save()
