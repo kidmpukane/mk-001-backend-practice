@@ -4,6 +4,7 @@ from user_profiles.models import Merchant
 
 
 class Store(RandomIDModel):
+    id = models.AutoField(primary_key=True)
     merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE)
     store_name = models.CharField(max_length=225, null=True, blank=True)
     store_description = models.CharField(max_length=225, null=True, blank=True)

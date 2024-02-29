@@ -5,4 +5,4 @@ from .models import Store
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
-        exclude = ['id']
+        fields = '__all__'
