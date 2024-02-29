@@ -55,3 +55,9 @@
   "password": "qwerty123456"
 }
 
+{
+  "merchant_id": 594507773954
+}
+
+
+
