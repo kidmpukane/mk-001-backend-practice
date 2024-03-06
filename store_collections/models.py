@@ -5,10 +5,12 @@ from user_profiles.models import Customer
 
 
 class BaseCollection(RandomIDModel):
-    collection_title = models.CharField(max_length=150, null=True, blank=True)
+    collection_title = models.CharField(
+        max_length=150, null=True, blank=True, default="Collection Title")
     collection_subtitle = models.CharField(
-        max_length=100, null=True, blank=True)
-    collection_image = models.CharField(max_length=500, null=True, blank=True)
+        max_length=100, null=True, blank=True, default="Collection Subtitle")
+    collection_image = models.ImageField(
+        upload_to='images/', null=True, blank=True, default="../default_images/profile_picture.jpg")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

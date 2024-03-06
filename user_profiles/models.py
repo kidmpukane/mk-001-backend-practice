@@ -8,11 +8,12 @@ class BaseUser(RandomIDModel):
         CustomUser, on_delete=models.CASCADE, default=1)
     email = models.EmailField(null=True, blank=True)
     profile_picture = models.ImageField(
-        upload_to='images/', null=True, blank=True)
+        upload_to='images/', null=True, blank=True, default="../default_images/profile_picture.jpg")
     background_picture = models.ImageField(
-        upload_to='images/', null=True, blank=True)
+        upload_to='images/', null=True, blank=True, default="../default_images/background_picture.jpg")
     user_name = models.CharField(max_length=100, default="no-username")
-    user_bio = models.CharField(max_length=500, default="no-bio")
+    user_bio = models.CharField(
+        max_length=500, default="no-bio, please enter your bio :)")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

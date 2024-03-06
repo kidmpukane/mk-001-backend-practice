@@ -6,9 +6,12 @@ from user_profiles.models import Merchant
 class Store(RandomIDModel):
     id = models.AutoField(primary_key=True)
     merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE)
-    store_name = models.CharField(max_length=225, null=True, blank=True)
-    store_description = models.CharField(max_length=225, null=True, blank=True)
-    store_image = models.CharField(max_length=500, null=True, blank=True)
+    store_name = models.CharField(
+        max_length=225, null=True, blank=True, default="Enter Store Name")
+    store_description = models.CharField(
+        max_length=225, null=True, blank=True, default="Enter Store Description")
+    store_image = models.ImageField(
+        upload_to='images/', null=True, blank=True, default="../default_images/fabrice-villard-Jrl_UQcZqOc-unsplash.jpg")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
