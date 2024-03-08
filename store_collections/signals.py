@@ -13,7 +13,7 @@ def create_store_for_primary_collection(sender, instance, created, **kwargs):
             store_id=instance, collection_title=f"{instance.store_name}'s Primary Collection", collection_image="../default_images/primary_collection.jpg")
 
 
-@receiver(post_save, sender=SecondaryCollection)
+@receiver(post_save, sender=Store)
 def create_store_for_secondary_collection(sender, instance, created, **kwargs):
     if created:
         # The SecondaryCollection instance is created, you can perform additional actions here
@@ -21,7 +21,7 @@ def create_store_for_secondary_collection(sender, instance, created, **kwargs):
             store_id=instance, collection_title=f"{instance.store_name}'s Secondary Collection", collection_image="../default_images/secondary_collection.jpg")
 
 
-@receiver(post_save, sender=TertiaryCollection)
+@receiver(post_save, sender=Store)
 def create_store_for_tertiary_collection(sender, instance, created, **kwargs):
     if created:
         # The TertiaryCollection instance is created, you can perform additional actions here
