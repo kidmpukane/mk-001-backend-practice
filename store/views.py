@@ -1,4 +1,5 @@
 from rest_framework.decorators import api_view
+from django.db import transaction
 from rest_framework import status
 from rest_framework.response import Response
 from .models import Store
@@ -65,23 +66,30 @@ def get_store_by_id(request, merchant_id):
 
 # .......................................EDIT STORE DATA.......................................
 
-def update_data(request, id, queryset, serializer_class):
-    user_profiles_info_update = queryset.objects.get(pk=id)
-    serializer = serializer_class(
-        instance=user_profiles_info_update, data=request.data)
+def update_data(request, id, model_class, serializer_class):
+    print(request.data)
+    try:
+        instance = model_class.objects.get(pk=id)
+    except model_class.DoesNotExist:
+        return Response({"detail": "Not found"}, status=404)
 
-    if serializer.is_valid():
-        serializer.save()
+    serializer = serializer_class(instance=instance, data=request.data)
 
-    return Response(serializer.data)
+    with transaction.atomic():
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            print(serializer.errors)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
 
 
 @api_view(['PUT'])
 def update_store_data(request, id):
     return update_data(request, id, Store, StoreSerializer)
 
-
 # .......................................DELETE STORE DATA.......................................
+
 
 @api_view(['DELETE'])
 def delete_store(request, id):

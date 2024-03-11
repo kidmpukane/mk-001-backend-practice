@@ -54,17 +54,45 @@
   "email": "testclothing@ttcc.com",
   "password": "Qwerty123456"
 }
+
+
+--> Store Upload/Update
 {
-  "id": 681587545376,
-  "store_id": ,
-  "collection_title": "SUMMER",
-  "collection_subtitle": "WEAR"
+    "id": 924018412538,
+    "store_name": "The Test Clothing Co.",
+    "store_description": "At TTCC we pride ourselves in bringing you the best and highest qualtiy clothing.",
+    "store_image": "/media/images/marcos-paulo-prado-L092fym0_iI-unsplash.jpg",
+    "merchant_id": 465525446745
 }
 
+--> Store Collection Upload/Update
+    {
+        "id": 681587545376,
+        "collection_title": "SUMMER",
+        "collection_subtitle": "WEAR",
+        "collection_image": "/media/images/Mona_Lisa_by_Leonardo_da_Vinci.jpg",
+        "store_id": 924018412538
+    }
+
+--> Product Upload/Update
 {
-  "merchant_id": 594507773954
+    "product_name": "The Mona Lisa",
+    "product_image": "/media/images/Mona_Lisa_by_Leonardo_da_Vinci.jpg",
+    "product_sizes": "Large",
+    "product_colours": "Pink",
+    "merchant_id": 465525446745,
+    "collection_id": 681587545376
 }
 
+--> Customer collection_subtitle
 
-
+    {
+        "id": 483621381186,
+        "collection_title": "User's Collection",
+        "collection_subtitle": "User's Subtitle",
+        "collection_image": "/default_images/quarteneary_collection.jpg",
+        "created_at": "2024-03-11T14:23:26.902477Z",
+        "updated_at": "2024-03-11T14:24:21.444923Z",
+        "customer_id": 857048833531
+    }
 
