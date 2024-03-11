@@ -78,10 +78,11 @@ def update_data(request, id, model_class, serializer_class):
     with transaction.atomic():
         if serializer.is_valid():
             serializer.save()
+            # Return the updated data upon success
+            return Response(serializer.data)
         else:
             print(serializer.errors)
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+            return Response(serializer.errors, status=400)
 
 
 @api_view(['PUT'])
