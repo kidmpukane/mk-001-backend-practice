@@ -5,6 +5,7 @@ from user_profiles.models import Customer
 
 
 class BaseCollection(RandomIDModel):
+    id = models.AutoField(primary_key=True)
     collection_title = models.CharField(
         max_length=150, null=True, blank=True, default="Collection Title")
     collection_subtitle = models.CharField(
