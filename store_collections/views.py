@@ -46,32 +46,40 @@ def get_all_customer_collections(request):
 
 # .......................................REGISTER STORE.......................................
 
-def store_registration(serializer_class, request):
+def collection_creation(serializer_class, request):
+    print("Request Data:", request.data)
     serializer = serializer_class(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['POST'])
-def create_primary_collection(request):
-    return store_registration(PrimaryCollectionSerializer, request)
-
-
-@api_view(['POST'])
-def create_secondary_collection(request):
-    return store_registration(SecondaryCollectionSerializer, request)
-
-
-@api_view(['POST'])
-def create_tertiary_collection(request):
-    return store_registration(TertiaryCollectionSerializer, request)
+    else:
+        # Customize error messages
+        print("Serializer Errors:", serializer.errors)
+        errors = serializer.errors
+        for field, error_list in errors.items():
+            errors[field] = [
+                f"{field.capitalize()}: {error}" for error in error_list]
+        return Response({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
 def create_customer_collection(request):
-    return store_registration(CustomerCollectionSerializer, request)
+    return collection_creation(CustomerCollectionSerializer, request)
+
+
+@api_view(['POST'])
+def create_primary_collection(request):
+    return collection_creation(PrimaryCollectionSerializer, request)
+
+
+@api_view(['POST'])
+def create_secondary_collection(request):
+    return collection_creation(SecondaryCollectionSerializer, request)
+
+
+@api_view(['POST'])
+def create_tertiary_collection(request):
+    return collection_creation(TertiaryCollectionSerializer, request)
 
 
 # .......................................GET USER BY ID.......................................
