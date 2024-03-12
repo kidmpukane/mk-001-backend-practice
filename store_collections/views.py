@@ -154,9 +154,14 @@ def edit_customer_collection(request, id):
 # .......................................DELETE STORE DATA.......................................
 
 def delete_collection(request, id, queryset):
-    delete_store_info = queryset.objects.get(pk=id)
-    delete_store_info.delete()
-    return Response("This store has been successfully deleted")
+    try:
+        delete_store_info = queryset.objects.get(pk=id)
+        delete_store_info.delete()
+        return Response("This store has been successfully deleted", status=status.HTTP_200_OK)
+    except queryset.DoesNotExist:
+        return Response("Store not found", status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response(f"An error occurred: {str(e)}", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['DELETE'])
