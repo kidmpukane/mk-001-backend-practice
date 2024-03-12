@@ -1,6 +1,0 @@
-[x]: Fix the Merchant and Store create through Json
-[x]: Create Collection, Gallery, as well as the Gallery view
-[x]: Fix unique IDs
-[x]: Fix date created & updated
-[x]: Create store functionality
-[x]: Create image upload functionality

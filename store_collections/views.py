@@ -111,7 +111,7 @@ def get_tertiary_collections(request, store_id):
 
 @api_view(['GET'])
 def get_customer_collection(request, customer_id):
-    return get_data_customer(request, customer_id, CustomerCollection, CustomerCollectionSerializer)
+    return get_data_customer(CustomerCollection, CustomerCollectionSerializer, customer_id)
 
 
 # .......................................EDIT STORE DATA.......................................

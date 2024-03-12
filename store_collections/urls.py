@@ -18,7 +18,7 @@ urlpatterns = [
          views.get_secondary_collection),
     path('get-tertiary-collections/<int:store_id>/',
          views.get_tertiary_collections),
-    path('get-customer-collections/<int:store_id>/',
+    path('get-customer-collections/<int:customer_id>/',
          views.get_customer_collection),
 
 
