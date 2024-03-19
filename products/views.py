@@ -117,6 +117,32 @@ def get_tertiary_product(request, id):
 # .......................................GET PRODUCT BY ID........................................
 
 @api_view(['GET'])
+def get_primary_product_for_collection(request, collection_id):
+    try:
+
+        store_query = PrimaryProduct.objects.filter(
+            collection_id=collection_id)
+    except PrimaryProduct.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = PrimaryProductSerializer(store_query, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_secondary_product_for_collection(request, collection_id):
+    try:
+
+        store_query = SecondaryProduct.objects.filter(
+            collection_id=collection_id)
+    except SecondaryProduct.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = SecondaryProductSerializer(store_query, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
 def get_primary_product(request, primary_id):
     try:
         primary_product_data, similar_primary_products = get_product_and_similars(

@@ -12,6 +12,11 @@ urlpatterns = [
     path('primary_product/<int:primary_id>/', views.get_primary_product),
     path('secondary_product/<int:secondary_id>/', views.get_secondary_product),
 
+    path('primary-products-for-collections/<int:collection_id>/',
+         views.get_primary_product_for_collection),
+    path('secondary-products-for-collections/<int:collection_id>/',
+         views.get_secondary_product_for_collection),
+
 
     path('create-primary-product', views.create_primary_product),
     path('create-secondary-product', views.create_secondary_product),

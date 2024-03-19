@@ -81,7 +81,7 @@
     "product_sizes": "Large",
     "product_colours": "Pink",
     "merchant_id": 465525446745,
-    "collection_id": 681587545376
+    "collection_id": 295815595215
 }
 
 --> Customer collection_subtitle
