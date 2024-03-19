@@ -1,0 +1,15 @@
+POST http://127.0.0.1:8000/accounts/csrf_cookie
+Content-Type: application/json
+
+###
+POST http://127.0.0.1:8000/accounts/login
+Content-Type: application/json
+
+{
+  "email": "customer@example.com",
+  "password": "Qwerty123456"
+}
+
+###
+POST http://127.0.0.1:8000/api/customer-profile/17
+Content-Type: application/json
